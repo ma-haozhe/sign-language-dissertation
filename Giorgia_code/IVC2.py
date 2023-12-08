@@ -3,6 +3,19 @@ import os
 import numpy as np
 from scipy.io import savemat
 
+'''
+This version of IVC crops the video to a specific 'region of interest'
+by using pixel_margin_height and pixel_margin_width.
+
+Calculates the sum of squared differences in grayscale values between successive frames 
+and stores these values in a list (envelope).
+
+save in both npy (numpy) and mat format.
+
+What does it mean by Giorgia "based on grayscale - 
+must be extended to RGB"?
+'''
+
 input_path = '../../EEG_experiments/SignLanguage_PsychoPy/input/stimuli/'
 output_path = './outputs/features/envelope2/'
 pixel_margin_heigh = 50
