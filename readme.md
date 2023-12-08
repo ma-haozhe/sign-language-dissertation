@@ -1,6 +1,6 @@
 # Sign Language Dissertation 2023-24
 
-Folder - Giorgia_code: files Giorgia sent on Oct 20, 2023's email,
+Folder - `Giorgia_code`: files Giorgia sent on Oct 20, 2023's email,
 contains: 
 - EEG segmentation and preprocessing code
 - code for extracting the IVC or 'envelope' from the video (based on
