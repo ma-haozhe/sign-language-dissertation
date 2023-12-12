@@ -3,6 +3,8 @@ import os
 import numpy as np
 from scipy.io import savemat
 
+import matplotlib.pyplot as plt
+
 '''
 This version of IVC crops the video to a specific 'region of interest'
 by using pixel_margin_height and pixel_margin_width.
@@ -12,12 +14,17 @@ and stores these values in a list (envelope).
 
 save in both npy (numpy) and mat format.
 
-What does it mean by Giorgia "based on grayscale - 
+Q1 What does it mean by Giorgia "based on grayscale - 
 must be extended to RGB"?
+
+Q2 why does it crop the ROI region, what does the top right corner do
 '''
 
-input_path = '../../EEG_experiments/SignLanguage_PsychoPy/input/stimuli/'
-output_path = './outputs/features/envelope2/'
+#input_path = '../../EEG_experiments/SignLanguage_PsychoPy/input/stimuli/'
+#output_path = './outputs/features/envelope2/'
+input_path = 'stimuli'
+output_path = 'envelope'
+# video 1 8096frames/269sec = 30fps
 pixel_margin_heigh = 50
 pixel_margin_width = 150
 
@@ -45,7 +52,20 @@ for filename in os.listdir(input_path):
             ret,imgCur = cam.read()
 
             # if there remain frames in the video to read in
-            if ret:                
+            if ret:  
+                '''
+                # Draw a rectangle around the ROI
+                cv2.rectangle(imgPrev, 
+                            (pixel_margin_width, pixel_margin_heigh), 
+                            (width - pixel_margin_width, heigh - pixel_margin_heigh), 
+                            (0, 0, 255),  # Red color in BGR
+                            3)  # Thickness      
+                # Display the image with ROI
+                plt.imshow(cv2.cvtColor(imgPrev, cv2.COLOR_BGR2RGB))
+                plt.title("Frame with ROI")
+                plt.show()      
+
+                '''
                 # Init
                 imgDif = np.zeros_like(imgPrev)
                 Dif = 0
