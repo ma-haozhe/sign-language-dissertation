@@ -8,16 +8,15 @@
 
 
 ## Files
-Folder - `Giorgia_code`: files Giorgia sent on Oct 20, 2023's email,
+Folder - `previous_code`: files Giorgia sent on Oct 20, 2023's email,
 contains: 
 - `segment_and_preprocess_EEG.py` EEG segmentation and preprocessing code
 - `IVC2.py`code for extracting the IVC or 'envelope' from the video (based on grayscale - must be extended to RGB) *(waht does this mean)*
 - code for generating the CND data structure
 - code for running the cross-validation
-- code for running some basic analysis (sorry, this is a bit messy and
-not well documented)
+- code for running some basic analysis (this is a bit messy and not well documented)
 - `result_without_hand_face` folder contains json files of body pose detection from open pose. Every file is a a frame in the video. 8000+ files.
- 
+
 
 ## Code and implemnentation part
 

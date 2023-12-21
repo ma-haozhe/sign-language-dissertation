@@ -22,7 +22,7 @@ Q2 why does it crop the ROI region, what does the top right corner do
 
 #input_path = '../../EEG_experiments/SignLanguage_PsychoPy/input/stimuli/'
 #output_path = './outputs/features/envelope2/'
-input_path = 'stimuli'
+input_path = 'stimuli/'
 output_path = 'envelope'
 # video 1 8096frames/269sec = 30fps
 pixel_margin_heigh = 50
@@ -53,7 +53,7 @@ for filename in os.listdir(input_path):
 
             # if there remain frames in the video to read in
             if ret:  
-                '''
+                
                 # Draw a rectangle around the ROI
                 cv2.rectangle(imgPrev, 
                             (pixel_margin_width, pixel_margin_heigh), 
@@ -65,7 +65,7 @@ for filename in os.listdir(input_path):
                 plt.title("Frame with ROI")
                 plt.show()      
 
-                '''
+                
                 # Init
                 imgDif = np.zeros_like(imgPrev)
                 Dif = 0
