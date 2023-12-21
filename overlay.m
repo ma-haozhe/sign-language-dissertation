@@ -9,8 +9,9 @@ function overlay()
     videoFile = '/Users/haozhema/sign-language-dissertation-tcd-2023/stimuli/V01.mp4';
     vidObj = VideoReader(videoFile);
     %data = load('/Users/haozhema/sign-language-dissertation-tcd-2023/envelope/V01.mat');
-    data = load('/Users/haozhema/sign-language-dissertation-tcd-2023/envelope/V01.mat');
-    frameDifferences = data.feature;
+    data = load('/Users/haozhema/sign-language-dissertation-tcd-2023/IVC_openpose_envelope/ivc_values_final.mat');
+    %frameDifferences = data.feature;
+    frameDifferences = data.ivc_values;
 
     % Create GUI
     hFig = figure;

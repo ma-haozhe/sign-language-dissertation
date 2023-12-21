@@ -16,6 +16,9 @@ input_path = 'result_without_hand_face'  # replace with the path to your JSON fi
 output_path = 'IVC_openpose_envelope'
 os.makedirs(output_path, exist_ok=True)
 
+# we set a confidence threshold, i assume the lower waist is causing the problem.
+confidence_threshold = 0.4
+
 # Function to extract frame number from filename
 def extract_frame_number(filename):
     match = re.search(r'(\d+)_keypoints', filename)
@@ -41,7 +44,7 @@ for i, json_file in enumerate(json_files):
         if not people:
             continue  # Skip if no people are detected in the frame
 
-        # Assuming one person per frame, adjust if necessary
+        # one person per frame. 
         person = people[0]
         keypoints = np.array(person.get('pose_keypoints_2d', []))
 
@@ -51,7 +54,13 @@ for i, json_file in enumerate(json_files):
         # Calculate IVC if not the first frame
         if prev_keypoints is not None:
             # Calculate the sum of squared differences
-            ivc_value = np.sum((keypoints[:, :2] - prev_keypoints[:, :2])**2)
+            #ivc_value = np.sum((keypoints[:, :2] - prev_keypoints[:, :2])**2)
+            # Calculate differences where both current and previous confidences are above the threshold
+            valid_differences = (keypoints[:, 2] > confidence_threshold) & (prev_keypoints[:, 2] > confidence_threshold)
+            
+            # Calculate the sum of squared differences only for valid keypoints
+            differences = (keypoints[valid_differences, :2] - prev_keypoints[valid_differences, :2]) ** 2
+            ivc_value = np.sum(differences)
             ivc_values.append(ivc_value)
             print(f"Processing frame {i}, IVC value: {ivc_value}")
 
