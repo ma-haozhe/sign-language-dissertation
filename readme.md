@@ -25,6 +25,8 @@ not well documented)
 
    - [Read more](https://www.analyticsvidhya.com/?url=https%3A%2F%2Fwww.analyticsvidhya.com%2Fblog%2F2022%2F01%2Fa-comprehensive-guide-on-human-pose-estimation%2F)
    - A Comprehensive Guide on Human Pose Estimation ([analyticsvidhya.com](https://www.analyticsvidhya.com/blog/2022/01/a-comprehensive-guide-on-human-pose-estimation/))
+Pose detection used Openpose as the solution 
+
 
 ## Notes for Presentation
 
