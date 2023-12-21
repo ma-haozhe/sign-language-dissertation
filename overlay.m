@@ -8,6 +8,7 @@ function overlay()
     % Load Video and Data
     videoFile = '/Users/haozhema/sign-language-dissertation-tcd-2023/stimuli/V01.mp4';
     vidObj = VideoReader(videoFile);
+    %data = load('/Users/haozhema/sign-language-dissertation-tcd-2023/envelope/V01.mat');
     data = load('/Users/haozhema/sign-language-dissertation-tcd-2023/envelope/V01.mat');
     frameDifferences = data.feature;
 

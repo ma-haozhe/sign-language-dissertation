@@ -16,6 +16,8 @@ contains:
 - code for running the cross-validation
 - code for running some basic analysis (sorry, this is a bit messy and
 not well documented)
+- `result_without_hand_face` folder contains json files of body pose detection from open pose. Every file is a a frame in the video. 8000+ files.
+ 
 
 ## Code and implemnentation part
 
@@ -25,7 +27,8 @@ not well documented)
 
    - [Read more](https://www.analyticsvidhya.com/?url=https%3A%2F%2Fwww.analyticsvidhya.com%2Fblog%2F2022%2F01%2Fa-comprehensive-guide-on-human-pose-estimation%2F)
    - A Comprehensive Guide on Human Pose Estimation ([analyticsvidhya.com](https://www.analyticsvidhya.com/blog/2022/01/a-comprehensive-guide-on-human-pose-estimation/))
-Pose detection used Openpose as the solution 
+
+    Pose detection used Open pose as the solution 
 
 
 ## Notes for Presentation
