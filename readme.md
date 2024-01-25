@@ -8,7 +8,7 @@
 
 
 ## Files
-Folder - `Giorgia_code`: files Giorgia sent on Oct 20, 2023's email,
+Folder - `giorgia_code`: files Giorgia sent on Oct 20, 2023's email,
 contains: 
 - `segment_and_preprocess_EEG.py` EEG segmentation and preprocessing code
 - `IVC2.py`code for extracting the IVC or 'envelope' from the video (based on grayscale - must be extended to RGB) *(waht does this mean)*
