@@ -12,7 +12,7 @@ import re #regular expression
 
 
 # Define paths
-input_path = 'result_without_hand_face'  # replace with the path to your JSON files
+input_path = 'result_without_hand_face'  # path for json files storage from openpose
 output_path = 'IVC_openpose_envelope'
 os.makedirs(output_path, exist_ok=True)
 

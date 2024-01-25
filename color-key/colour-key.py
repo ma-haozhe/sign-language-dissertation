@@ -23,7 +23,7 @@ frame_rate = int(video.get(cv2.CAP_PROP_FPS))
 background_image = cv2.resize(background_image, (frame_width, frame_height))
 
 # Define the codec and create VideoWriter object
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # You can also use 'avc1' for H.264
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')  
 
 out = cv2.VideoWriter(output_video_path, fourcc, frame_rate, (frame_width, frame_height))
 
