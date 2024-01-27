@@ -17,6 +17,8 @@ contains:
 - code for running some basic analysis (this is a bit messy and not well documented)
 - `result_without_hand_face` folder contains json files of body pose detection from open pose. Every file is a a frame in the video. 8000+ files.
 
+### Files in the EEG dataset
+.BDF files: BioSemi Data Format
 
 ## Code and implemnentation part
 
