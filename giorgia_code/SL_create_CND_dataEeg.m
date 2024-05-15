@@ -5,14 +5,22 @@ close all;
 clear; clc;
 
 % Add other directories to path
-addpath ..\..\MATLAB\cnsp_utils
-addpath ..\..\MATLAB\cnsp_utils\cnd
-addpath ..\..\MATLAB\NoiseTools
-addpath ..\..\MATLAB\eeglab
+
+% addpath ..\..\MATLAB\cnsp_utils
+% addpath ..\..\MATLAB\cnsp_utils\cnd
+% addpath ..\..\MATLAB\NoiseTools
+% addpath ..\..\MATLAB\eeglab
+
+addpath ./CNSP-resources/CNSP/libs/cnsp_utils
+addpath ./CNSP-resources/CNSP/libs/cnsp_utils/cnd
+addpath ./CNSP-resources/CNSP/libs/NoiseTools
+addpath ./CNSP-resources/CNSP/libs/eeglab
 
 %% Parameters preprocessing
-dataEegFolder = '.\outputs\64Hz\EEG\';
-dataCNDFolder = '.\outputs\64Hz\CND\';
+%dataEegFolder = '.\outputs\64Hz\EEG\';
+%dataCNDFolder = '.\outputs\64Hz\CND\';
+dataEegFolder = './eegProject/datasets/SLdata/eeg/';
+dataCNDFolder = './eegProject/datasets/SLdata/1-30Hz/Mastoids/';
 pre = '1-30Hz';
 reref_type = 'Mastoids';
 downfreq = 64;
@@ -20,7 +28,8 @@ downfreq = 64;
 %% General parameters
 NTRIALS = 14;
 conditions = {'V', 'R'};
-subjects = {'698908', '752086'};
+%subjects = {'698908', '752086'};
+subjects = {'164123'}
 dataType = 'EEG';
 deviceName = 'Biosemi';
 chanlocs = load([dataCNDFolder, 'chanlocs64.mat']).chanlocs;

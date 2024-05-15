@@ -13,21 +13,24 @@ import matplotlib.pyplot as plt
 ## Parameters
 ################
 # General
-root_dir = './inputs/EEG_raw/'
-output_base = './outputs/64Hz/EEG/'
+#root_dir = './inputs/EEG_raw/'
+#output_base = './outputs/64Hz/EEG/'
+root_dir = './eegProject/datasets/SLdata/eeg/'
+output_base = './eegProject/datasets/SLdata'
 
 csv_sequence = 'stimuli_sequence.csv'
 csv_behave = 'answers_to_questions.csv'
 csv_pre = 'preprocessing_pipeline.csv'
 plot = False
-subjects_to_process = ['698908', '752086']  # ID of the subject
+#subjects_to_process = ['698908', '752086']  # ID of the subject
+subjects_to_process = ['164123']
 
 # Preprocessing
 # Notch filtering
 notch_applied = False
 freq_notch = 50
 
-# Bandpass filtering
+# Bandpass filtering 
 bpf_applied = True
 bandpass = '1-30Hz'
 freq_low   = 1
@@ -77,6 +80,7 @@ for idx, file in enumerate(files):
     path[-1] = csv_sequence
     path = '/'.join(path)
     df_stimuli = pd.read_csv(path)  
+    print(df_stimuli)
     df_stimuli.to_csv(os.path.join(output_dir, csv_sequence), index=False)
 
     # Load and resave behavioural questions
@@ -119,6 +123,7 @@ for idx, file in enumerate(files):
     ############################################################################
     # Find starting sample of events in the trigger channel
     N_start_events = mne.find_events(raw)
+    print(N_start_events)
 
     # Select only relevant events
     N_start_events = N_start_events[N_start_events[:, 2] == 65281]

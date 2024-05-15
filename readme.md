@@ -17,8 +17,14 @@ contains:
 - code for running some basic analysis (this is a bit messy and not well documented)
 - `result_without_hand_face` folder contains json files of body pose detection from open pose. Every file is a a frame in the video. 8000+ files.
 
+Folder - `EEG_raw`: EEG data collected from experiments
+
 ### Files in the EEG dataset
 .BDF files: BioSemi Data Format
+
+### Process EEG data
+1. Follow the tutorial on [BYOData Preparation Guidelines](https://docs.google.com/document/d/1llE0v-e2pdCv5WXoIZzU2V00T2TCElviH7Vu2C8RS50/edit) 
+
 
 ## Code and implemnentation part
 
