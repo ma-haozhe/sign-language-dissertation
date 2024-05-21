@@ -17,9 +17,9 @@ addpath ./CNSP-resources/CNSP/libs/NoiseTools
 addpath ./CNSP-resources/CNSP/libs/eeglab
 
 %% Parameters preprocessing
-%dataEegFolder = '.\outputs\64Hz\EEG\';
+%dataEegFolder = '.\outputs\64Hz\EEG\'; 
 %dataCNDFolder = '.\outputs\64Hz\CND\';
-dataEegFolder = './eegProject/datasets/SLdata/eeg/';
+dataEegFolder = './eegProject/datasets/SLdata/';
 dataCNDFolder = './eegProject/datasets/SLdata/1-30Hz/Mastoids/';
 pre = '1-30Hz';
 reref_type = 'Mastoids';
@@ -29,7 +29,7 @@ downfreq = 64;
 NTRIALS = 14;
 conditions = {'V', 'R'};
 %subjects = {'698908', '752086'};
-subjects = {'164123'}
+subjects = {'164123'};
 dataType = 'EEG';
 deviceName = 'Biosemi';
 chanlocs = load([dataCNDFolder, 'chanlocs64.mat']).chanlocs;
@@ -44,7 +44,7 @@ for condition = conditions
     for idxSbj = 1:length(subjects)
         subject = subjects{idxSbj};
         disp(['Processing subject ', subject])
-        curr_path = [dataEegFolder,pre,'\',reref_type,'\',subject,'\'];
+        curr_path = [dataEegFolder,pre,'/',reref_type,'/',subject,'/'];
 
         % Get preprocessing pipeline from csv
         T = readtable([curr_path, 'preprocessing_pipeline.csv']);
@@ -92,9 +92,9 @@ for condition = conditions
         end
 
         % Saving preprocessed data
-        eegFolder = [dataCNDFolder, cond, '\', pre, '\', reref_type];
+        eegFolder = [dataCNDFolder, cond, '/', pre, '/', reref_type];
         mkdir(eegFolder)
-        eegPreFilename = [eegFolder, '\pre_dataSub', num2str(idxSbj), '.mat'];
+        eegPreFilename = [eegFolder, '/pre_dataSub', num2str(idxSbj), '.mat'];
         disp(['Saving preprocessed EEG data: ', cond, ' of subject ' num2str(idxSbj)])
         save(eegPreFilename,'eeg');
 

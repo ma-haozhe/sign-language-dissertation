@@ -3,19 +3,28 @@ close all;
 clear; clc;
 
 % Paths
-dataCNDFolder = '.\outputs\64Hz\CND\';
-dataStimFolder = '.\outputs\64Hz\features\';
+%dataCNDFolder = '.\outputs\64Hz\CND\';
+%dataStimFolder = '.\outputs\64Hz\features\';
+% Changing to Mac path
+dataCNDFolder = './eegProject/datasets/SLdata/1-30Hz/Mastoids/';
+dataStimFolder = './outputs/30Hz/features/';
 
 % Add other directories to path
-addpath ..\..\MATLAB\cnsp_utils
-addpath ..\..\MATLAB\cnsp_utils\cnd
+% addpath ..\..\MATLAB\cnsp_utils
+% addpath ..\..\MATLAB\cnsp_utils\cnd
+addpath ./CNSP-resources/CNSP/libs/cnsp_utils/
+addpath ./CNSP-resources/CNSP/libs/cnsp_utils/cnd/
 
 %% General parameters
+% Number of trials for each condition
 NTRIALS = 14;
+% Downsampled frequency
 fs_down = 30;
+% Conditions: video and reverse
 conditions = {'V', 'R'}; 
 feature_names = {'envelope1', 'envelope2'};
 additionalDetails = {'envelope1', 'envelope2'};
+% Features that need to be transposed (flipped) - because of those reveresed ones
 feats2transpose = {'envelope1', 'envelope2'};
 
 %% Generate data stim for each condition
@@ -37,7 +46,7 @@ for condition = conditions
             else
                 stim_name = [cond, '0', num2str(idx_stim), '.mat'];
             end
-            stim_path = [dataStimFolder,feature_name,'\',stim_name];
+            stim_path = [dataStimFolder,feature_name,'/',stim_name];
             disp(stim_path)
             stim.audioFiles{idx_stim} = stim_name;
 

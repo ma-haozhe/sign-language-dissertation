@@ -19,17 +19,28 @@ must be extended to RGB"?
 
 Q2 why does it crop the ROI region, what does the top right corner do
 '''
-
+# set this flag to enable reveral of envelope data.
+reverse_envelopes = True
 #input_path = '../../EEG_experiments/SignLanguage_PsychoPy/input/stimuli/'
 #output_path = './outputs/features/envelope2/'
 input_path = 'stimuli/'
 #output_path = 'envelope'
 output_path = 'outputs/features/envelope2/'
+reverse_output_path = 'outputs/features/envelope1/'
 # video 1 8096frames/269sec = 30fps
 pixel_margin_heigh = 50
 pixel_margin_width = 150
 
 os.makedirs(output_path, exist_ok=True)
+os.makedirs(reverse_output_path, exist_ok=True)
+
+# Function to reverse and save envelope data
+def reverse_and_save_envelope(filename, data, output_path):
+    reversed_data = data[::-1]
+    reversed_filename = filename.replace('V', 'R', 1)  # Replace the first occurrence of 'V' with 'R'
+    np.save(os.path.join(output_path, reversed_filename + '.npy'), reversed_data)
+    savemat(os.path.join(output_path, reversed_filename + '.mat'), {'feature': reversed_data})
+
 for filename in os.listdir(input_path):
     if filename.endswith( ".mp4"):
         filename = filename.split('/')[-1].split('.')[0]
@@ -90,3 +101,16 @@ for filename in os.listdir(input_path):
         cv2.destroyAllWindows()
         np.save(os.path.join(output_path, filename + '.npy'), envelope)
         savemat(os.path.join(output_path, filename + '.mat'), {'feature': envelope})
+
+# Reverse the envelopes if the flag is set to True
+if reverse_envelopes:
+    for filename in os.listdir(output_path):
+        if filename.endswith(".npy"):
+            base_filename = filename.split('.')[0]
+            envelope_data = np.load(os.path.join(output_path, filename))
+            reverse_and_save_envelope(base_filename, envelope_data, reverse_output_path)
+        elif filename.endswith(".mat"):
+            base_filename = filename.split('.')[0]
+            envelope_data = np.load(os.path.join(output_path, base_filename + '.npy'))  # Load the numpy file
+            reverse_and_save_envelope(base_filename, envelope_data, reverse_output_path)
+            
