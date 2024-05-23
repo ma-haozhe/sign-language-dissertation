@@ -40,7 +40,7 @@ for condition = conditions
 
     % Load data stim for this condition
     load([dataCNDFolder, cond, '/dataStim.mat'], 'stim');
-
+    
     for idxSbj = 1:length(subjects)
         subject = subjects{idxSbj};
         disp(['Processing subject ', subject])
@@ -86,7 +86,9 @@ for condition = conditions
         disp('Interpolating bad channels...')
         if isfield(eeg,'chanlocs')
             for i = 1:numel(eeg.data)
-                eeg.data{i} = removeBadChannels(eeg.data{i},eeg.chanlocs);
+                if eeg.nonemptyTrials{i} == 1
+                    eeg.data{i} = removeBadChannels(eeg.data{i},eeg.chanlocs);
+                end
             end
             eeg = cndNewOp(eeg,'removeBadChannels');
         end

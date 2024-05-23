@@ -2,5 +2,5 @@ V01.mp4
 \stimuli
 V01-result.avi
 eegProject/datasets/SLdata/EEG/*
-.DS_Store
+**/.DS_Store
 EEG_raw
