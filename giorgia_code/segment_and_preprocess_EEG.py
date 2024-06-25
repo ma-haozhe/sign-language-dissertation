@@ -15,15 +15,24 @@ import matplotlib.pyplot as plt
 # General
 #root_dir = './inputs/EEG_raw/'
 #output_base = './outputs/64Hz/EEG/'
-root_dir = './eegProject/datasets/SLdata/eeg/'
-output_base = './eegProject/datasets/SLdata'
+#root_dir = './eegProject/datasets/SLdata/eeg/'
+#output_base = './eegProject/datasets/SLdata'
+#June 19, 24: let's switch back to use EEG_raw folder, more generalized
+root_dir = './EEG_raw/EEG/'
+output_base = './outputs_new/64Hz/EEG'
+
+
 
 csv_sequence = 'stimuli_sequence.csv'
 csv_behave = 'answers_to_questions.csv'
 csv_pre = 'preprocessing_pipeline.csv'
 plot = False
 #subjects_to_process = ['698908', '752086']  # ID of the subject
-subjects_to_process = ['164123']
+#subjects_to_process = ['164123', '319885'] - these two are done
+subjects_to_process = ['698908', 
+                       '992123', '888521', '966706', 
+                       '910810', '780931', '437658', 
+                       '176622']
 
 # Preprocessing
 # Notch filtering
@@ -57,8 +66,12 @@ downfreq = 64
 files = glob.glob(os.path.join(root_dir, '**', '*.bdf'), recursive=True)
 # files = [file for file in files if subjects_to_process.any() in file]
 for idx, file in enumerate(files):
-    if file.split('/')[-1].split('.')[0] not in subjects_to_process:
+     # Extract the subject ID from the file name
+    subject_id = file.split('/')[-1].split('.')[0]
+    if subject_id not in subjects_to_process:
         continue
+    # if file.split('/')[-1].split('.')[0] not in subjects_to_process:
+    #     continue
     print(idx, file.split('/')[-1])
 
     # Select which file to open
@@ -74,23 +87,56 @@ for idx, file in enumerate(files):
         
     # Create file that keeps track of the preprocessing
     df_pre = pd.DataFrame()
+    print("file to open: ", file_to_open)
+    ##################################################################
 
-    # Load and resave stimuli sequence
-    path = file_to_open.split('/')
-    path[-1] = csv_sequence
-    path = '/'.join(path)
-    df_stimuli = pd.read_csv(path)  
-    print(df_stimuli)
-    df_stimuli.to_csv(os.path.join(output_dir, csv_sequence), index=False)
+    # # Load and resave stimuli sequence
+    # path = file_to_open.split('/')
+    # print("path: ", path)
+    # path[-1] = csv_sequence
+    # print("path for csv_sequence: ", path[-1])
+    # path = '/'.join(path)
+    # print("path for csv_sequence-2: ", path)
+    # df_stimuli = pd.read_csv(path)  
+    # print(df_stimuli)
+    # df_stimuli.to_csv(os.path.join(output_dir, csv_sequence), index=False)
 
-    # Load and resave behavioural questions
-    path = file_to_open.split('/')
-    path[-1] = csv_behave
-    path = '/'.join(path)
-    if os.path.exists(path):
-        df_behave = pd.read_csv(path)  
-        df_behave.to_csv(os.path.join(output_dir, csv_behave), index=False)
+    # # Load and resave behavioural questions
+    # path = file_to_open.split('/')
+    # path[-1] = csv_behave
+    # path = '/'.join(path)
+    # if os.path.exists(path):
+    #     df_behave = pd.read_csv(path)  
+    #     df_behave.to_csv(os.path.join(output_dir, csv_behave), index=False)
 
+    ##################################################################
+    # Construct the path for the subject-specific folder
+    subject_folder_pattern = f'{subject_id}_*'
+    print("subject_folder_pattern: ", subject_folder_pattern)
+    print("root_dir: ", root_dir)
+    subject_folder = glob.glob(os.path.join(root_dir, subject_folder_pattern))
+    print("subject_folder: ", subject_folder)
+    if subject_folder:
+        subject_folder = subject_folder[0]
+
+        # Load and resave stimuli sequence
+        stim_path = os.path.join(subject_folder, csv_sequence)
+        if os.path.exists(stim_path):
+            df_stimuli = pd.read_csv(stim_path)  
+            print("we do have df_stimuli: ", df_stimuli)
+            df_stimuli.to_csv(os.path.join(output_dir, csv_sequence), index=False)
+        else:
+            print(f"Stimuli sequence file not found for subject {subject_id}")
+
+        # Load and resave behavioural questions
+        behave_path = os.path.join(subject_folder, csv_behave)
+        if os.path.exists(behave_path):
+            df_behave = pd.read_csv(behave_path)  
+            df_behave.to_csv(os.path.join(output_dir, csv_behave), index=False)
+        else:
+            print(f"Behavioural questions file not found for subject {subject_id}")
+    else:
+        print(f"Subject folder not found for subject {subject_id}")
     ############################################################################
     ## Load EEG data
     ############################################################################

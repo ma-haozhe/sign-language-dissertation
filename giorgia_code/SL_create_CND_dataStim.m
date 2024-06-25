@@ -6,8 +6,12 @@ clear; clc;
 %dataCNDFolder = '.\outputs\64Hz\CND\';
 %dataStimFolder = '.\outputs\64Hz\features\';
 % Changing to Mac path
-dataCNDFolder = './eegProject/datasets/SLdata/1-30Hz/Mastoids/';
-dataStimFolder = './outputs/30Hz/features/';
+%dataCNDFolder = './eegProject/datasets/SLdata/1-30Hz/Mastoids/';
+%dataStimFolder = './outputs/30Hz/features/';
+
+% June 19, 2024 new output path
+dataCNDFolder = './outputs_new/64Hz/CND/';
+dataStimFolder = './outputs_new/64Hz/features/';
 
 % Add other directories to path
 % addpath ..\..\MATLAB\cnsp_utils

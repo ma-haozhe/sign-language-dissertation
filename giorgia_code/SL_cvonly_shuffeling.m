@@ -4,20 +4,27 @@ clear; clc;
 
 %% Parameters
 % Select EEG data to use
-datafolder = '.\outputs\64Hz\CND\';
-TRFfolder = '.\outputs\64Hz\';
-nSubs = 2;
+%datafolder = '.\outputs\64Hz\CND\';
+%datafolder = './eegProject/datasets/SLdata/1-30Hz/Mastoids/';
+%TRFfolder = '.\outputs\64Hz\';
+%TRFfolder = './outputs/64Hz/';
+% June 19, 2024 new
+TRFfolder = './outputs_new/64Hz/';
+datafolder = './outputs_new/64Hz/CND/';
+
+nSubs = 22;
 conditions = {'V', 'R'}; 
 reRefType = 'Mastoids'; 
 pre = '1-30Hz'; 
 
-sfreq = 64;
+sfreq = 64; % eeg fs
 remove_start_and_end = 1;
 rm_seconds = 0.5; % s
 rm_samples = rm_seconds*sfreq;
 
 % Select features to use
-dataStim = '\dataStim.mat';
+%dataStim = '\dataStim.mat';
+dataStim = '/dataStim.mat';
 feature_name = 'A2'; 
 feature_idxs = [2]; % IdyomTony=21,Phentr=36,Pht=35
 shuffle_idxs = [1];  
@@ -67,11 +74,12 @@ for condition = conditions
     %% Nasted crossvalidation
     for sub = 1:nSubs
         %% Load preprocessed EEG
-        eegPreFilename = [datafolder,cond,'/',pre,'/',reRefType,'\pre_dataSub', num2str(sub),'.mat'];
+        %eegPreFilename = [datafolder,cond,'/',pre,'/',reRefType,'\pre_dataSub', num2str(sub),'.mat'];
+        eegPreFilename = [datafolder,cond,'/',pre,'/',reRefType,'/pre_dataSub', num2str(sub),'.mat'];
         load(eegPreFilename,'eeg')
         FS_EEG = eeg.fs;
 
-        %% Deal with empty trials and do shuffeling
+        %% Deal with empty trials and do shuffling
         data = eeg.data;
         i = 0;
         for tr = 1:length(data)
@@ -88,7 +96,7 @@ for condition = conditions
                         if strcmp(shuffle_type, 'flip')
                             shuffled_feature = flip(shuffled_feature);
                         elseif strcmp(shuffle_type, 'shuffle')
-                            shuffled_feature = shuffle(shuffled_feature);
+                            shuffled_feature = shuffled_feature; %shuffle{shuffled_feature};
                         elseif strcmp(shuffle_type, 'shuffle_values')
                             idx_feat_onset = onsets_idxs(feature_idxs==j);
                             onsets = stim.data{idx_feat_onset, tr};
@@ -105,8 +113,9 @@ for condition = conditions
                     end
                     tmpEnv = [tmpEnv, stim.data{j, tr}];
                 end
-                features{i} = tmpEnv; clear tmpEnv; 
-                shuffele{i} = tmpShu; clear tmpShu;
+                
+                features{i} = resample(double(tmpEnv),eeg.fs,stim.fs); clear tmpEnv; 
+                shuffle{i} = resample(double(tmpShu),eeg.fs,stim.fs); clear tmpShu;
             end
         end
         n_training_trial = i;
@@ -117,7 +126,7 @@ for condition = conditions
             eegLen = size(response{tr},1);
             minLen = min(envLen,eegLen);
             features{tr} = double(features{tr}(1:minLen,:));
-            shuffele{tr} = double(shuffele{tr}(1:minLen,:));
+            shuffle{tr} = double(shuffle{tr}(1:minLen,:));
             response{tr} = double(response{tr}(1:minLen,:));
         end
 
@@ -125,7 +134,7 @@ for condition = conditions
         if remove_start_and_end
             response = cellfun(@(x) x(rm_samples:size(x, 1)-rm_samples, :),response,'UniformOutput',false);
             features = cellfun(@(x) x(rm_samples:size(x, 1)-rm_samples, :),features,'UniformOutput',false);
-            shuffele = cellfun(@(x) x(rm_samples:size(x, 1)-rm_samples, :),shuffele,'UniformOutput',false); 
+            shuffle = cellfun(@(x) x(rm_samples:size(x, 1)-rm_samples, :),shuffle,'UniformOutput',false); 
         end
 
         %% Normalising EEG data
@@ -133,6 +142,11 @@ for condition = conditions
         eeg_mean = mean(eeg_data_mat(:));
         eeg_std = std(eeg_data_mat(:));
         response = cellfun(@(x) (x-eeg_mean)/eeg_std,response,'UniformOutput',false);
+
+        stim_data_mat = cell2mat(features');
+        stim_mean = mean(stim_data_mat(:));
+        stim_std = std(stim_data_mat(:));
+        features = cellfun(@(x) (x-stim_mean)/stim_std,features,'UniformOutput',false);
         
         %% Crossvalidation for subject j
         % Define training and test sets
@@ -140,8 +154,8 @@ for condition = conditions
         eeg_train = response;
     
         % Run fast cross-validation
-        disp('Running cross-validation...')
-        cv = mTRFcrossval(stim_train,eeg_train,FS_EEG,Dir,tmin,tmax,lambda_vals);
+        disp('Running cross-validation...') 
+        cv = mTRFcrossval(stim_train,eeg_train,eeg.fs,Dir,tmin,tmax,lambda_vals);
         
         % Get optimal hyperparameters
         [rmax,idx] = max(mean(mean(cv.r, 1), 3));
@@ -149,7 +163,7 @@ for condition = conditions
     
         % Train model
         disp('Training model...')
-        Smodel = mTRFtrain(stim_train,eeg_train,FS_EEG,Dir,tmin,tmax,lambda,'zeropad',0);
+        Smodel = mTRFtrain(stim_train,eeg_train,eeg.fs,Dir,tmin,tmax,lambda,'zeropad',0);
         Smodel.lambda = lambda;
 
         if Dir == 1
@@ -244,7 +258,7 @@ for condition = conditions
         rpredAll_trials{sub} = squeeze(cv.r(:, idx, :)); clear cv;
 
         if shuffle_mode
-            cv_shu = mTRFcrossval(shuffele,eeg_train,FS_EEG,Dir,tmin,tmax,lambda_vals);
+            cv_shu = mTRFcrossval(shuffle,eeg_train,FS_EEG,Dir,tmin,tmax,lambda_vals);
             [rmax_shu,idx_shu] = max(mean(mean(cv_shu.r, 1), 3));
             rpredShu(sub, :) = squeeze(mean(cv_shu.r(:, idx_shu, :), 1)); 
             rpredShu_trials{sub} = squeeze(cv_shu.r(:, idx_shu, :)); clear cv_shu;

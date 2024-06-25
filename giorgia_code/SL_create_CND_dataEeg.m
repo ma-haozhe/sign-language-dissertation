@@ -19,8 +19,11 @@ addpath ./CNSP-resources/CNSP/libs/eeglab
 %% Parameters preprocessing
 %dataEegFolder = '.\outputs\64Hz\EEG\'; 
 %dataCNDFolder = '.\outputs\64Hz\CND\';
-dataEegFolder = './eegProject/datasets/SLdata/';
-dataCNDFolder = './eegProject/datasets/SLdata/1-30Hz/Mastoids/';
+% June 19, 2024 changing to new output
+%dataEegFolder = './eegProject/datasets/SLdata/';
+%dataCNDFolder = './eegProject/datasets/SLdata/1-30Hz/Mastoids/';\
+dataEegFolder = './outputs_new/64Hz/EEG/'; 
+dataCNDFolder = './outputs_new/64Hz/CND/';
 pre = '1-30Hz';
 reref_type = 'Mastoids';
 downfreq = 64;
@@ -29,7 +32,10 @@ downfreq = 64;
 NTRIALS = 14;
 conditions = {'V', 'R'};
 %subjects = {'698908', '752086'};
-subjects = {'164123'};
+subjects = {'164123', '319885', '225637', '917095', '676934', '645737', ...
+    '819069', '707776', '558393', '243067', '777647', '727892', '385164', ...
+    '613333', '252198', '698908', '888521', '910810',... 
+    '992123', '437658', '966706', '780931'};
 dataType = 'EEG';
 deviceName = 'Biosemi';
 chanlocs = load([dataCNDFolder, 'chanlocs64.mat']).chanlocs;

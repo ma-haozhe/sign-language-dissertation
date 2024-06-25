@@ -3,16 +3,26 @@ close all;
 clear; clc;
 
 % Set main paths
-base_folder = '.\outputs\30Hz\features\';
-path_fig = '.\outputs\30Hz\figures\'; 
-datafolder = '.\outputs\30Hz\CND\';
-TRFfolder = '.\outputs\30Hz\';
+% base_folder = '.\outputs\30Hz\features\';
+% path_fig = '.\outputs\30Hz\figures\'; 
+% datafolder = '.\outputs\30Hz\CND\';
+% TRFfolder = '.\outputs\30Hz\';
+
+base_folder = './outputs_new/64Hz/features/';
+path_fig = './outputs_new/64Hz/figures/';
+datafolder = './outputs_new/64Hz/CND/';
+TRFfolder = './outputs_new/64Hz/';
+
 
 %% Parameters
 reRefType = 'Mastoids';
 cv = 'cvonly';
-lags = '-150_550\';
-pre = '0.5-8Hz\';
+%June 19, 2024 changed here the lag is -50_450
+%lags = '-150_550/';
+lags = '-50_450/';
+%pre = '0.5-8Hz\';
+% what does this pre do here?
+pre = '1-30Hz/';
 
 % for viz of the results
 conditions = {'V', 'R'}; 
@@ -47,7 +57,7 @@ pre_set_zlim_dif = 0.01;
 avg_over_subject = 0;
 avg_over_chs = 1;
 brain_area = '';  %centrofrontal-
-subjects_to_select = [1,2];  
+subjects_to_select = [1,22];  
 
 %% Define parameters figures
 xlims = [tmin, tmax];
@@ -89,12 +99,13 @@ barv_diff = [];
 for idx_cond = 1: length(conditions)
     cond = conditions{idx_cond};
     %% Load EEG data for metadata and channel locs
-    eegPreFilename = [datafolder, cond,'\',pre,reRefType,'\pre_dataSub1.mat'];
+    %eegPreFilename = [datafolder, cond,'\',pre,reRefType,'\pre_dataSub1.mat'];
+    eegPreFilename = [datafolder, cond,'/',pre,reRefType,'/pre_dataSub22.mat'];
     load(eegPreFilename,'eeg')
 
     %% Load TRFs and correlations
     % Build paths
-    tfolder = [TRFfolder, 'TRFs\', pre, lags, reRefType, '\'];
+    tfolder = [TRFfolder, 'TRFs/', pre, lags, reRefType, '/'];
     prename = [feature_name, '_', cond, '_'];
     
     % Load TRFs
@@ -112,7 +123,7 @@ for idx_cond = 1: length(conditions)
 
     if decoding
         % Load Pearson's decoding
-        tfolder_dec = [TRFfolder, 'Decoders\', pre, lags, reRefType, '\'];
+        tfolder_dec = [TRFfolder, 'Decoders/', pre, lags, reRefType, '/'];
         r_all_path = [tfolder_dec, prename, 'rpredAll_', cv, '.mat'];
         load(r_all_path, 'rpredAll');
         r_dec{idx_cond} = rpredAll;
