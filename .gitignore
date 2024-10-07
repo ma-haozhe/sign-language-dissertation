@@ -4,3 +4,8 @@ V01-result.avi
 eegProject/datasets/SLdata/EEG/*
 **/.DS_Store
 EEG_raw
+outputs_new/64Hz/EEG/1-8Hz/Mastoids\
+outputs_new/64Hz/EEG/1-4Hz/Mastoids\
+outputs_new/64Hz/EEG/1-30Hz/Mastoids\
+TCD-dissertation
+temp-preprocessedEEG-separate
